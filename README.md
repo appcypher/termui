@@ -28,6 +28,8 @@
 
 ##
 
+A terminal user interface library for the lazy
+
 ## Outline
 
 - [Installation](#installation)

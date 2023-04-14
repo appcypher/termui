@@ -1,7 +1,7 @@
 [package]
 name = "termui"
 version = "0.1.0"
-description = ""
+description = "A terminal user interface library for the lazy"
 keywords = []
 categories = []
 
