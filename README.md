@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/appcypher/termui" target="_blank">
-    <img src="https://raw.githubusercontent.com/appcypher/termui/main/assets/a_logo.png" alt="termui Logo" width="100"></img>
+    <!-- <img src="https://raw.githubusercontent.com/appcypher/termui/main/assets/logo.png" alt="termui Logo" width="100"></img> -->
   </a>
 
   <h1 align="center">termui</h1>
