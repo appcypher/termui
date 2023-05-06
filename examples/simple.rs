@@ -1,43 +1,51 @@
-
 use anyhow::Result;
+use crossterm::event::{KeyCode, KeyEvent};
+use std::{process, sync::Arc};
+use termui::{
+    context::TerminalContext,
+    element::{Attribute, DivBuilder, PBuilder},
+    handler::Handler,
+    rx::State,
+    style::{Color, Property, Selector, Style},
+};
 
 //-------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------
 
 fn main() -> Result<()> {
-    // let style = style! {
-    //     .root {
-    //         background-color: #000000;
-    //         color: #ffffff;
-    //     }
-    // };
+    let style = Style::from_iter([Selector::Class(
+        "root".to_string(),
+        vec![
+            Property::BackgroundColor(Color::Rgb(0, 0, 0)),
+            Property::Color(Color::Rgb(255, 255, 255)),
+        ],
+    )]);
 
-    // let message = state! { "Hello, World!" };
-    // let on_key_handler = handler! (event.code) {
-    //     KeyCode::Char('q') => {
-    //         process::exit(0);
-    //     }
-    //     KeyCode::Char('h') => {
-    //         message.set("Hello, World!".to_string());
-    //     }
-    //     KeyCode::Char('w') => {
-    //         message.set("World, Hello!".to_string());
-    //     }
-    //     _ => {}
-    // };
+    let message = Arc::new(State::new("Hello, World!".to_string()));
+    let message_clone = Arc::clone(&message);
+    let on_key_handler = Handler::new(move |event: &KeyEvent| {
+        match event.code {
+            KeyCode::Char('q') => {
+                process::exit(0);
+            }
+            KeyCode::Char('h') => {
+                message_clone.set("Hello, World!".to_string())?;
+            }
+            KeyCode::Char('w') => {
+                message_clone.set("World, Hello!".to_string())?;
+            }
+            _ => {}
+        }
 
-    // let root = widget! {
-    //     div(class = "root", @key = <on_key_handler>) {
-    //         p { <message> }
-    //     }
-    // };
+        Ok(())
+    });
 
-    // TerminalContext::default()
-    //     .widget(root)
-    //     .style(style)
-    //     .start()
+    let root = DivBuilder::new()
+        .attr(Attribute::Class("root".to_string()))
+        .attr(Attribute::OnKeyEvent(on_key_handler))
+        .child(PBuilder::new().content_rx(message.as_ref()).build())
+        .build();
 
-    todo!()
+    TerminalContext::new(root, style)?.run()
 }
-

@@ -2,9 +2,11 @@
 #![warn(missing_debug_implementations, missing_docs, rust_2018_idioms)]
 #![deny(unreachable_pub, private_in_public)]
 
-//! termui
+//! `termui` is a terminal UI library for Rust.
 
-pub mod widget;
+pub mod context;
+pub mod geom;
 pub mod style;
-// pub mod handler;
-// pub mod rx;
+pub mod element;
+pub mod handler;
+pub mod rx;
