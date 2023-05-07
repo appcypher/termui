@@ -15,7 +15,7 @@ pub use selector::*;
 
 /// Style is a collection of properties that can be applied to a widget.
 #[derive(Clone, Debug)]
-pub struct Style {
+pub struct StyleSheet {
     /// The list of selectors.
     selectors: Vec<selector::Selector>,
 }
@@ -24,7 +24,7 @@ pub struct Style {
 // Trait Implementations
 //----------------------------------------------------------------
 
-impl FromIterator<Selector> for Style {
+impl FromIterator<Selector> for StyleSheet {
     fn from_iter<T: IntoIterator<Item = Selector>>(iter: T) -> Self {
         Self {
             selectors: iter.into_iter().collect(),

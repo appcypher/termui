@@ -3,7 +3,7 @@
 use crate::{
     element::Element,
     geom::{Point, Size},
-    style::Style,
+    stylesheet::StyleSheet,
 };
 use anyhow::Result;
 use crossterm::{
@@ -26,8 +26,8 @@ pub struct TerminalContext {
     cusor_pos: Point,
     /// The root element.
     root_element: Arc<dyn Element>,
-    /// The style to apply to the elements.
-    style: Style,
+    /// The style sheet to apply to the elements.
+    style_sheet: StyleSheet,
     // TODO(appcypher): Maybe we should use a smarter search instead as focusable attribute on an element may change. Leading to an expensive write of the tree.
     // /// The focus tree.
     // focus_tree: Tree<Arc<dyn Element>>,
@@ -41,12 +41,12 @@ pub struct TerminalContext {
 
 impl TerminalContext {
     /// Creates a new terminal context.
-    pub fn new(root_element: Arc<dyn Element>, style: Style) -> Result<Self> {
+    pub fn new(root_element: Arc<dyn Element>, style_sheet: StyleSheet) -> Result<Self> {
         Ok(Self {
             size: terminal::size()?.into(),
             cusor_pos: cursor::position()?.into(),
             root_element,
-            style,
+            style_sheet,
         })
     }
 
@@ -82,5 +82,22 @@ impl TerminalContext {
         println!();
 
         Ok(())
+    }
+
+    pub fn clear() -> Result<()> {
+        eprintln!("terminal size: {:?}", terminal::size()?);
+        eprintln!("remainder terminal draw area: {:?}", terminal::size()?);
+        // let out = &mut stdout();
+
+        // for y in self.cursor_position.y..self.size.height {
+        //     out.queue(MoveTo(0, y))?;
+        //     out.queue(Clear(ClearType::CurrentLine))?;
+        // }
+
+        // out.queue(MoveTo(0, self.cursor_position.y))?;
+        // out.flush()?;
+
+        // Ok(())
+        todo!()
     }
 }

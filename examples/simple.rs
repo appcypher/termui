@@ -3,10 +3,10 @@ use crossterm::event::{KeyCode, KeyEvent};
 use std::{process, sync::Arc};
 use termui::{
     context::TerminalContext,
-    element::{Attribute, DivBuilder, PBuilder},
+    element::{Attribute, DivBuilder, ParagraphBuilder},
     handler::Handler,
     rx::State,
-    style::{Color, Property, Selector, Style},
+    stylesheet::{Color, Property, Selector, StyleSheet},
 };
 
 //-------------------------------------------------------------------------------
@@ -14,7 +14,7 @@ use termui::{
 //-------------------------------------------------------------------------------
 
 fn main() -> Result<()> {
-    let style = Style::from_iter([Selector::Class(
+    let style = StyleSheet::from_iter([Selector::Class(
         "root".to_string(),
         vec![
             Property::BackgroundColor(Color::Rgb(0, 0, 0)),
@@ -44,7 +44,7 @@ fn main() -> Result<()> {
     let root = DivBuilder::new()
         .attr(Attribute::Class("root".to_string()))
         .attr(Attribute::OnKeyEvent(on_key_handler))
-        .child(PBuilder::new().content_rx(message.as_ref()).build())
+        .child(ParagraphBuilder::new().content_rx(message.as_ref()).build())
         .build();
 
     TerminalContext::new(root, style)?.run()

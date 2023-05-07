@@ -1,6 +1,6 @@
 //! This module contains the definitions of the elements.
 
-use crate::style::Selector;
+use crate::stylesheet::Selector;
 
 use super::{Attribute, Element};
 use std::sync::{Arc, Mutex, Weak};
@@ -40,13 +40,13 @@ pub struct Span {
 
 /// A paragraph element.
 #[derive(Debug)]
-pub struct P {
+pub struct Paragraph {
     base: Mutex<BaseElement>,
 }
 
 crate::create_element_builder_struct!(Div, DivBuilder);
 crate::create_element_builder_struct!(Span, SpanBuilder);
-crate::create_element_builder_struct!(P, PBuilder);
+crate::create_element_builder_struct!(Paragraph, ParagraphBuilder);
 
 //----------------------------------------------------------------
 // Methods
@@ -54,11 +54,11 @@ crate::create_element_builder_struct!(P, PBuilder);
 
 crate::impl_element_methods!(Div);
 crate::impl_element_methods!(Span);
-crate::impl_element_methods!(P);
+crate::impl_element_methods!(Paragraph);
 
 crate::impl_element_builder_methods!(Div, DivBuilder);
 crate::impl_element_builder_methods!(Span, SpanBuilder);
-crate::impl_element_builder_methods!(P, PBuilder);
+crate::impl_element_builder_methods!(Paragraph, ParagraphBuilder);
 
 //----------------------------------------------------------------
 // Trait Implementations
@@ -66,4 +66,4 @@ crate::impl_element_builder_methods!(P, PBuilder);
 
 crate::impl_element_trait!(Div);
 crate::impl_element_trait!(Span);
-crate::impl_element_trait!(P);
+crate::impl_element_trait!(Paragraph);

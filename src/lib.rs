@@ -6,7 +6,7 @@
 
 pub mod context;
 pub mod geom;
-pub mod style;
+pub mod stylesheet;
 pub mod element;
 pub mod handler;
 pub mod rx;
