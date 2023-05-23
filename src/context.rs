@@ -2,7 +2,7 @@
 
 use crate::{
     element::Element,
-    geom::{Point, Size},
+    point::{Point, Size},
     stylesheet::StyleSheet,
 };
 use anyhow::Result;
@@ -23,11 +23,11 @@ pub struct TerminalContext {
     /// The size of the drawable terminal canvas.
     size: Size,
     /// The position of the cursor.
-    cusor_pos: Point,
+    cursor_position: Point,
     /// The root element.
     root_element: Arc<dyn Element>,
-    /// The style sheet to apply to the elements.
-    style_sheet: StyleSheet,
+    /// The stylesheet to apply to the elements.
+    stylesheet: StyleSheet,
     // TODO(appcypher): Maybe we should use a smarter search instead as focusable attribute on an element may change. Leading to an expensive write of the tree.
     // /// The focus tree.
     // focus_tree: Tree<Arc<dyn Element>>,
@@ -41,19 +41,19 @@ pub struct TerminalContext {
 
 impl TerminalContext {
     /// Creates a new terminal context.
-    pub fn new(root_element: Arc<dyn Element>, style_sheet: StyleSheet) -> Result<Self> {
+    pub fn new(root_element: Arc<dyn Element>, stylesheet: StyleSheet) -> Result<Self> {
         Ok(Self {
             size: terminal::size()?.into(),
-            cusor_pos: cursor::position()?.into(),
+            cursor_position: cursor::position()?.into(),
             root_element,
-            style_sheet,
+            stylesheet,
         })
     }
 
     /// Runs the event loop.
     pub fn run(&mut self) -> Result<()> {
         terminal::enable_raw_mode()?;
-        // self.clear()?;
+        self.clear()?;
         // self.render(self.root_element, parent_xxx)?;
 
         loop {
@@ -61,6 +61,7 @@ impl TerminalContext {
             if event::poll(Duration::from_millis(100))? {
                 // Check for new events.
                 if let Event::Key(event) = event::read()? {
+                    // TODO(appcypher): Remove this. Let user handle exits themselves.
                     if event.code == KeyCode::Char('c') && event.modifiers == KeyModifiers::CONTROL
                     {
                         break;
@@ -71,6 +72,7 @@ impl TerminalContext {
                     }
 
                     // TODO(appcypher): Handle events.
+                    // TODO(appcypher): Check for exit error from event handler.
                 }
             }
 
@@ -81,10 +83,13 @@ impl TerminalContext {
         terminal::disable_raw_mode()?;
         println!();
 
+        // TODO(appcypher): Handle exit error if there is any.
+
         Ok(())
     }
 
-    pub fn clear() -> Result<()> {
+    /// Clears the draw area and can make room for drawing content.
+    pub fn clear(&self) -> Result<()> {
         eprintln!("terminal size: {:?}", terminal::size()?);
         eprintln!("remainder terminal draw area: {:?}", terminal::size()?);
         // let out = &mut stdout();
@@ -97,7 +102,13 @@ impl TerminalContext {
         // out.queue(MoveTo(0, self.cursor_position.y))?;
         // out.flush()?;
 
-        // Ok(())
-        todo!()
+        Ok(())
+    }
+
+    /// Updates the terminal information.
+    pub fn update_term_info(&mut self) -> Result<()> {
+        self.size = terminal::size()?.into();
+        self.cursor_position = cursor::position()?.into();
+        Ok(())
     }
 }

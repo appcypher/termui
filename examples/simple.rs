@@ -1,11 +1,12 @@
 use anyhow::Result;
 use crossterm::event::{KeyCode, KeyEvent};
-use std::{process, sync::Arc};
+use std::sync::Arc;
 use termui::{
     context::TerminalContext,
     element::{Attribute, DivBuilder, ParagraphBuilder},
+    exit,
     handler::Handler,
-    rx::State,
+    reactive::State,
     stylesheet::{Color, Property, Selector, StyleSheet},
 };
 
@@ -14,7 +15,7 @@ use termui::{
 //-------------------------------------------------------------------------------
 
 fn main() -> Result<()> {
-    let style = StyleSheet::from_iter([Selector::Class(
+    let stylesheet = StyleSheet::from_iter([Selector::Class(
         "root".to_string(),
         vec![
             Property::BackgroundColor(Color::Rgb(0, 0, 0)),
@@ -27,7 +28,7 @@ fn main() -> Result<()> {
     let on_key_handler = Handler::new(move |event: &KeyEvent| {
         match event.code {
             KeyCode::Char('q') => {
-                process::exit(0);
+                exit!()
             }
             KeyCode::Char('h') => {
                 message_clone.set("Hello, World!".to_string())?;
@@ -47,5 +48,5 @@ fn main() -> Result<()> {
         .child(ParagraphBuilder::new().content_rx(message.as_ref()).build())
         .build();
 
-    TerminalContext::new(root, style)?.run()
+    TerminalContext::new(root, stylesheet)?.run()
 }

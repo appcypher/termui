@@ -1,6 +1,6 @@
 //! This module contains the macro for creating elements.
 
-macro_rules! _widget {
+macro_rules! element {
     () => {
         // TODO(appcypher): Implement this.
     };
@@ -62,7 +62,7 @@ macro_rules! impl_element_builder_methods {
             /// Sets the content of the element.
             pub fn content_rx(
                 self,
-                content_observable: &impl crate::rx::Observable<String>,
+                content_observable: &impl crate::reactive::Observable<String>,
             ) -> Self {
                 self.0.set_content_rx(content_observable);
                 self
@@ -108,7 +108,7 @@ macro_rules! impl_element_methods {
             /// Sets the content of the element.
             fn set_content_rx(
                 self: &Arc<Self>,
-                content_observable: &impl crate::rx::Observable<String>,
+                content_observable: &impl crate::reactive::Observable<String>,
             ) {
                 let clone = Arc::clone(self);
                 content_observable.add_subscriber(std::sync::Arc::new(

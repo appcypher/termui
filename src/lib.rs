@@ -5,8 +5,9 @@
 //! `termui` is a terminal UI library for Rust.
 
 pub mod context;
-pub mod geom;
-pub mod stylesheet;
 pub mod element;
+pub mod error;
 pub mod handler;
-pub mod rx;
+pub mod point;
+pub mod reactive;
+pub mod stylesheet;
